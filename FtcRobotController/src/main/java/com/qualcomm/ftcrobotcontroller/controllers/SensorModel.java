@@ -5,13 +5,9 @@ import com.qualcomm.ftcrobotcontroller.opmodes.ARMAuto;
 
 public class SensorModel {
     private Location currLocation;
-    //@TODO find the correct resolution of the encoders
     private final double ENCODER_RES = 1440;
-    //@TODO measure the wheel radius of the robot
     private final double WHEEL_RADIUS = 0.04603;
-    //@TODO measure the wheel base of the robot
     private final double WHEEL_BASE = 0.3048;
-
     private final double GEAR_RATIO = 2.33;
 
     public SensorModel() {
@@ -40,6 +36,8 @@ public class SensorModel {
         double new_x = currLocation.getX()+(ds*Math.cos(currLocation.getTheta()));
         double new_y = currLocation.getY()+(ds*Math.sin(currLocation.getTheta()));
         double new_theta = currLocation.getTheta()+dtheta;
+
+        // Debug messages
         ARMAuto.debug.addData("x", new_x);
         ARMAuto.debug.addData("y", new_y);
         ARMAuto.debug.addData("theta", new_theta);

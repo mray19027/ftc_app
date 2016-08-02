@@ -53,6 +53,24 @@ public class DriveControl {
         ARMAuto.rightMotor.setPower(-SPD*0.25);
     }
 
+    private double errorCalculation(Location currLocation) {
+        double theta_b = Math.atan2(destLocation.getY()-initLocation.getY(), destLocation.getX()-initLocation.getX());
+        double theta_c = Math.atan2(currLocation.getY()-initLocation.getY(), currLocation.getX()-initLocation.getX());
+        double theta_d = theta_c - theta_b;
+        double distance = Math.sqrt(Math.pow(currLocation.getX()-initLocation.getX(), 2) +
+                Math.pow(currLocation.getY()-initLocation.getY(), 2));
+        double theta_error = currLocation.getTheta() - theta_b;
+        double distance_error = distance*Math.sin(theta_d);
+        double y = k1*theta_error + (currLocation.getSpd()==0 ? 0 : (k2/currLocation.getSpd()))*distance_error;
+
+        //Debug messages
+        ARMAuto.debug.addData("theta_error", theta_error);
+        ARMAuto.debug.addData("distance_error", distance_error);
+        ARMAuto.debug.addData("error", y);
+
+        return y;
+    }
+
     /**
      * Drive in a straight line from the initial location to the end location<br>
      *     Attempts to keep the robot on the shortest path from initial to destination locations by
@@ -60,21 +78,21 @@ public class DriveControl {
      * @param currLocation Current location that the robot is at
      */
     public void driveStraight(Location currLocation) {
-        double theta_b = Math.atan2(destLocation.getY()-initLocation.getY(), destLocation.getX()-initLocation.getX());
-        double theta_c = Math.atan2(currLocation.getY()-initLocation.getY(), currLocation.getX()-initLocation.getX());
-        double theta_d = theta_c - theta_b;
-        double distance = Math.sqrt(Math.pow(currLocation.getX()-initLocation.getX(), 2) +
-                                    Math.pow(currLocation.getY()-initLocation.getY(), 2));
-        double theta_error = currLocation.getTheta() - theta_b;
-        double distance_error = distance*Math.sin(theta_d);
-        double y = k1*theta_error + (currLocation.getSpd()==0 ? 0 : (k2/currLocation.getSpd()))*distance_error;
+        double y = errorCalculation(currLocation);
         ARMAuto.leftMotor.setPower(SPD+y);
         ARMAuto.rightMotor.setPower(SPD-y);
+    }
 
-        //Debug messages
-        ARMAuto.debug.addData("theta_error", theta_error);
-        ARMAuto.debug.addData("distance_error", distance_error);
-        ARMAuto.debug.addData("error", y);
+    /**
+     * Drive in a straight line from the initial location to the end location<br>
+     *     Attempts to keep the robot on the shortest path from initial to destination locations by
+     *     minimizing error in angle and distance
+     * @param currLocation Current location that the robot is at
+     */
+    public void driveReverse(Location currLocation) {
+        double y = errorCalculation(currLocation);
+        ARMAuto.leftMotor.setPower(-SPD+y);
+        ARMAuto.rightMotor.setPower(-SPD-y);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////

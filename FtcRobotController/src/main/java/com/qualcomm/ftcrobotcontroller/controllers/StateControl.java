@@ -13,10 +13,10 @@ import com.qualcomm.robotcore.robocol.Telemetry;
 public class StateControl {
 
     //Constants
-    private static double FWD_ERR = 0.1;
-    private static double TURN_ERR = 0.2;
+    private static double FWD_ERR = 0.05;
+    private static double TURN_ERR = 0.1;
 
-    public enum State { FWD, TURN, STOP}
+    public enum State { FWD, TURN, STOP, REVERSE}
 
     //Lookup table to identify the state-to-state interactions for the robot
     //  This lookup table will drive in a square
@@ -24,21 +24,16 @@ public class StateControl {
             State.FWD,
             State.TURN,
             State.FWD,
-            State.TURN,
-            State.FWD,
-            State.TURN,
-            State.FWD,
+            State.REVERSE,
             State.STOP};
 
     //Lookup table that provides the details for the state lookup table
     //  This table should be the same size as the state lookup table
     private static Location[] condition_array = {
-            new Location(0.75,0,0),
+            new Location(80.25*0.0254,0,0),
             new Location(0,0,-Math.PI/2),
-            new Location(0.75,0,0),
-            new Location(0,0,-Math.PI/2),
-            new Location(0.75,0,0),
-            new Location(0,0,-Math.PI/2),
+            new Location(22.25*0.0254,0,0),
+            new Location(22.25*0.0254,0,0),
             new Location(0,0,0)};
 
     private int current_state;

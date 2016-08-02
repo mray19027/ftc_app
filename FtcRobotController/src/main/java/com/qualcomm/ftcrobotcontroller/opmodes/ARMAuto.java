@@ -59,6 +59,9 @@ public class ARMAuto extends LinearOpMode {
                 case TURN:
                     driveController.turn(currentLocation);
                     break;
+                case REVERSE:
+                    driveController.driveReverse(currentLocation);
+                    break;
                 case STOP:
                     driveController.stop();
                     break;
