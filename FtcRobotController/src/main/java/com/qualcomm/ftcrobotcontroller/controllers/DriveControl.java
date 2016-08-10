@@ -91,8 +91,8 @@ public class DriveControl {
      */
     public void driveReverse(Location currLocation) {
         double y = errorCalculation(currLocation);
-        ARMAuto.leftMotor.setPower(-SPD+y);
-        ARMAuto.rightMotor.setPower(-SPD-y);
+        ARMAuto.leftMotor.setPower(-SPD-y);
+        ARMAuto.rightMotor.setPower(-SPD+y);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////

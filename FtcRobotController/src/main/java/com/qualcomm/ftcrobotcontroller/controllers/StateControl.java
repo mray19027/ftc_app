@@ -13,28 +13,50 @@ import com.qualcomm.robotcore.robocol.Telemetry;
 public class StateControl {
 
     //Constants
-    private static double FWD_ERR = 0.05;
-    private static double TURN_ERR = 0.1;
+    private static double FWD_ERR = 0.04;
+    private static double TURN_ERR = 0.09;
 
     public enum State { FWD, TURN, STOP, REVERSE}
 
     //Lookup table to identify the state-to-state interactions for the robot
     //  This lookup table will drive in a square
     private static State[] state_array = {
-            State.FWD,
-            State.TURN,
-            State.FWD,
-            State.REVERSE,
-            State.STOP};
+            State.FWD,  //1
+            State.TURN, //2
+            State.FWD,  //3
+            State.TURN, //4
+            State.TURN, //5
+            State.FWD,  //6 - Done with Bin 1
+            State.TURN, //7
+            State.FWD,  //8
+            State.TURN, //9
+            State.FWD,  //10
+            State.TURN, //11
+            State.TURN, //12
+            State.FWD,  //13 - Done with Bin 2
+            State.TURN, //14
+            State.FWD,  //15
+            State.STOP};//16
 
     //Lookup table that provides the details for the state lookup table
     //  This table should be the same size as the state lookup table
     private static Location[] condition_array = {
-            new Location(80.25*0.0254,0,0),
-            new Location(0,0,-Math.PI/2),
-            new Location(22.25*0.0254,0,0),
-            new Location(22.25*0.0254,0,0),
-            new Location(0,0,0)};
+            new Location(80.25*0.0254,0,0), //1
+            new Location(0,0,-Math.PI/2),   //2
+            new Location(22.25*0.0254,0,0), //3
+            new Location(0,0,-Math.PI/2),   //4
+            new Location(0,0,-Math.PI/2),   //5
+            new Location(22.25*0.0254,0,0), //6
+            new Location(0,0,-Math.PI/2),   //7
+            new Location(81.125*0.0254,0,0),//8
+            new Location(0,0,-Math.PI/2),   //9
+            new Location(22.25*0.0254,0,0), //10
+            new Location(0,0,-Math.PI/2),   //11
+            new Location(0,0,-Math.PI/2),   //12
+            new Location(22.25*0.0254,0,0), //13
+            new Location(0,0,-Math.PI/2),   //14
+            new Location(50.75*0.0254,0,0), //13
+            new Location(0,0,0)};           //15
 
     private int current_state;
 
